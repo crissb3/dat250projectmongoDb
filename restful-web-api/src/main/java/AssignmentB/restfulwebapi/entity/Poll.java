@@ -3,7 +3,6 @@ package AssignmentB.restfulwebapi.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,13 +29,13 @@ public class Poll {
 	private int voteRed;
 	private String status;
 	private int timeLimit;
-	
-	@ManyToOne(cascade=CascadeType.REMOVE)
+
+	@ManyToOne
 	private User user;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<User> usersVoted = new ArrayList<User>();
-	
+
 	public Poll() {}
 
 	public Poll(String name, String description, boolean isPublic, int voteGreen, int voteRed, String status,
@@ -54,21 +53,21 @@ public class Poll {
 	public void setUsersVoted(User userVoted) {
 		this.usersVoted.add(userVoted);
 	}
-
-
+	
 	public void setUser(User user) {
 		this.user = user;
-		user.setPolls(this);
+		if(user != null)
+			user.setPolls(this);
 	}
-	
+
 	public void setVoteRed(int red) {
 		this.voteRed += red;
 	}
-	
+
 	public void setVoteGreen(int green) {
 		this.voteGreen += green;
 	}
-	
+
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}

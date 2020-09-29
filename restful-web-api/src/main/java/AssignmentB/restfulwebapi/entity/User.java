@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Data
@@ -29,11 +27,10 @@ public class User {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Poll> polls = new ArrayList<Poll>();
 
-	@ManyToMany(mappedBy = "usersVoted", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "usersVoted", fetch = FetchType.EAGER)
 	private List<Poll> pollsVoted = new ArrayList<Poll>();
 
-	public User() {
-	}
+	public User() {}
 
 	public User(String uname, String fname, String lname, String password, String email, boolean admin) {
 		this.uname = uname;
@@ -45,12 +42,13 @@ public class User {
 	}
 
 	public void setPolls(Poll poll) {
-		this.polls.add(poll);
+		if(!polls.contains(poll))
+			this.polls.add(poll);
 	}
 
 	public void removePoll(Poll poll) {
-		poll.setUser(null);
 		this.polls.remove(poll);
+		poll.getUsersVoted().clear();
 	}
 
 	public void setPollsVoted(Poll poll) {

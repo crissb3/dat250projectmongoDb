@@ -18,7 +18,7 @@ public class UserRestController {
 	@Autowired
 	private IUserRepository userRepository;
 
-	@PutMapping("/users/{uname}/update")
+	@PutMapping("/users/{uname}")
 	public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable String uname) {
 		Optional<User> userOpt = userRepository.findById(uname);
 		if (!userOpt.isPresent()) {
@@ -37,7 +37,7 @@ public class UserRestController {
 			userOld.setAdmin(user.isAdmin());
 
 		userRepository.save(userOld);
-		return ResponseEntity.ok(userOld);
+		return ResponseEntity.ok().build();
 
 	}
 
