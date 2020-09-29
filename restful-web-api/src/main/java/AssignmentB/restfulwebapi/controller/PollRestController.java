@@ -10,27 +10,37 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import AssignmentB.restfulwebapi.entity.Poll;
+import AssignmentB.restfulwebapi.entity.User;
 import AssignmentB.restfulwebapi.repository.IPollRepository;
+import AssignmentB.restfulwebapi.repository.IUserRepository;
 
 @Controller
 public class PollRestController {
 
 	@Autowired
 	private IPollRepository pollRepository;
+	@Autowired
+	private IUserRepository userRepository;
 
-	@PutMapping("/polls/{id}/setVotes")
-	public ResponseEntity<Poll> setVotes(@RequestBody Poll poll, @PathVariable int id) {
+	@PutMapping("/polls/{id}/{uname}/setVotes")
+	public ResponseEntity<Poll> setVotes(@RequestBody Poll poll, @PathVariable int id, @PathVariable String uname) {
 		Optional<Poll> pollOpt = pollRepository.findById(id);
+		Optional<User> userOpt = userRepository.findById(uname);
 		if (!pollOpt.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+		if (!userOpt.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 
 		Poll pollOld = pollOpt.get();
+		User user = userOpt.get();
 
 		pollOld.setVoteGreen(poll.getVoteGreen());
 		pollOld.setVoteRed(poll.getVoteRed());
+		pollOld.setUsersVoted(user);
 		pollRepository.save(pollOld);
-		return ResponseEntity.ok(pollOld);
+		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("/polls/{id}/update")
