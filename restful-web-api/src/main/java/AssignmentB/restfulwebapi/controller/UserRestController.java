@@ -1,5 +1,7 @@
 package AssignmentB.restfulwebapi.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import AssignmentB.restfulwebapi.entity.User;
 import AssignmentB.restfulwebapi.repository.IUserRepository;
-
-import java.util.Optional;
 
 @Controller
 public class UserRestController {

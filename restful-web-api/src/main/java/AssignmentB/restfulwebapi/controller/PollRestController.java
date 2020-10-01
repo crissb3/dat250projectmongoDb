@@ -26,23 +26,31 @@ public class PollRestController {
 
 	@PutMapping("/polls/{id}/{uname}/setVotes")
 	public ResponseEntity<String> setVotes(@RequestBody Poll poll, @PathVariable int id, @PathVariable String uname) {
-		
-		if (!pollRepository.findById(id).isPresent()) {
+
+		if (!pollRepository.findById(id).isPresent())
 			return ResponseEntity.notFound().build();
-		}
-		if (!userRepository.findById(uname).isPresent()) {
+		if (!userRepository.findById(uname).isPresent())
 			return ResponseEntity.notFound().build();
-		}
 
 		Poll pollOld = pollRepository.findById(id).get();
 		User user = userRepository.findById(uname).get();
-		
-		for(User u : pollOld.getUsersVoted()) {
-			if(u.equals(user)) {
+
+		for (User u : pollOld.getUsersVoted()) {
+			if (u.equals(user))
 				return new ResponseEntity<>("You can only vote once!!!", HttpStatus.CONFLICT);
-			}
 		}
-		
+		boolean correctVotes = false;
+		if (poll.getVoteGreen() <= 1 && poll.getVoteRed() <= 1 && poll.getVoteGreen() >= 0 && poll.getVoteRed() >= 0)
+			correctVotes = true;
+		else
+			return new ResponseEntity<>("Entered incorrect vote numbers\n(Only 1 POSITIVE Vote allowed)",
+					HttpStatus.BAD_REQUEST);
+		if (poll.getVoteGreen() + poll.getVoteRed() == 1)
+			correctVotes = true;
+		else
+			return new ResponseEntity<>("You can only give one vote", HttpStatus.BAD_REQUEST);
+		if (!correctVotes)
+			return new ResponseEntity<>("Error!", HttpStatus.NOT_MODIFIED);
 		pollOld.setVoteGreen(poll.getVoteGreen());
 		pollOld.setVoteRed(poll.getVoteRed());
 		pollOld.setUsersVoted(user);
@@ -51,12 +59,26 @@ public class PollRestController {
 		return ResponseEntity.ok().build();
 	}
 
+	@PutMapping("/polls/{id}/IoT/setVotes")
+	public ResponseEntity<String> setVotesIoT(@RequestBody Poll poll, @PathVariable int id) {
+
+		if (!pollRepository.findById(id).isPresent())
+			return ResponseEntity.notFound().build();
+
+		Poll pollOld = pollRepository.findById(id).get();
+
+		pollOld.setVoteGreen(poll.getVoteGreen());
+		pollOld.setVoteRed(poll.getVoteRed());
+		pollRepository.save(pollOld);
+		return ResponseEntity.ok().build();
+	}
+
 	@PutMapping("/polls/{id}")
 	public ResponseEntity<Poll> updatePoll(@RequestBody Poll poll, @PathVariable int id) {
 		Optional<Poll> pollOpt = pollRepository.findById(id);
-		if (!pollOpt.isPresent()) {
+		if (!pollOpt.isPresent())
 			return ResponseEntity.notFound().build();
-		}
+
 		Poll pollOld = pollOpt.get();
 		if (poll.getName() != null)
 			pollOld.setName(poll.getName());
@@ -73,12 +95,12 @@ public class PollRestController {
 	}
 
 	@DeleteMapping("polls/{id}")
-	public ResponseEntity<Poll> deletePoll(@PathVariable int id){
+	public ResponseEntity<Poll> deletePoll(@PathVariable int id) {
 		Optional<Poll> optPoll = pollRepository.findById(id);
-		if(!optPoll.isPresent()) {
+		if (!optPoll.isPresent())
 			return ResponseEntity.notFound().build();
-		}
-		while (optPoll.isPresent()){
+
+		while (optPoll.isPresent()) {
 			Poll poll = optPoll.get();
 			poll.getUser().removePoll(poll);
 			pollRepository.save(poll);

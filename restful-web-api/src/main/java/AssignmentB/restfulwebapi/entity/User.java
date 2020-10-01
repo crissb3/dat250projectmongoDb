@@ -30,7 +30,8 @@ public class User {
 	@ManyToMany(mappedBy = "usersVoted", fetch = FetchType.EAGER)
 	private List<Poll> pollsVoted = new ArrayList<Poll>();
 
-	public User() {}
+	public User() {
+	}
 
 	public User(String uname, String fname, String lname, String password, String email, boolean admin) {
 		this.uname = uname;
@@ -42,7 +43,7 @@ public class User {
 	}
 
 	public void setPolls(Poll poll) {
-		if(!polls.contains(poll))
+		if (!polls.contains(poll))
 			this.polls.add(poll);
 	}
 

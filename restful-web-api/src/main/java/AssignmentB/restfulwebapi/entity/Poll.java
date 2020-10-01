@@ -36,7 +36,8 @@ public class Poll {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<User> usersVoted = new ArrayList<User>();
 
-	public Poll() {}
+	public Poll() {
+	}
 
 	public Poll(String name, String description, boolean isPublic, int voteGreen, int voteRed, String status,
 			int timeLimit, User user) {
@@ -53,10 +54,10 @@ public class Poll {
 	public void setUsersVoted(User userVoted) {
 		this.usersVoted.add(userVoted);
 	}
-	
+
 	public void setUser(User user) {
 		this.user = user;
-		if(user != null)
+		if (user != null)
 			user.setPolls(this);
 	}
 

@@ -11,8 +11,8 @@ import AssignmentB.restfulwebapi.entity.User;
 public class SpringDataRestConfig implements RepositoryRestConfigurer {
 
 	@Override
-	  public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-	    config.exposeIdsFor(User.class,Poll.class);
-	  }
+	public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+		config.exposeIdsFor(User.class, Poll.class);
+	}
 
 }
