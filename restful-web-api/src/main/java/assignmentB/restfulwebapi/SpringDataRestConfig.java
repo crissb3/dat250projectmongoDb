@@ -1,11 +1,11 @@
-package AssignmentB.restfulwebapi;
+package assignmentB.restfulwebapi;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 
-import AssignmentB.restfulwebapi.entity.Poll;
-import AssignmentB.restfulwebapi.entity.User;
+import assignmentB.restfulwebapi.entity.Poll;
+import assignmentB.restfulwebapi.entity.User;
 
 @Configuration
 public class SpringDataRestConfig implements RepositoryRestConfigurer {

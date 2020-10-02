@@ -1,4 +1,4 @@
-package AssignmentB.restfulwebapi.controller;
+package assignmentB.restfulwebapi.controller;
 
 import java.util.Optional;
 
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import AssignmentB.restfulwebapi.entity.Poll;
-import AssignmentB.restfulwebapi.entity.User;
-import AssignmentB.restfulwebapi.repository.IPollRepository;
-import AssignmentB.restfulwebapi.repository.IUserRepository;
+import assignmentB.restfulwebapi.entity.Poll;
+import assignmentB.restfulwebapi.entity.User;
+import assignmentB.restfulwebapi.repository.IPollRepository;
+import assignmentB.restfulwebapi.repository.IUserRepository;
 
 @Controller
 public class PollRestController {
@@ -28,9 +28,9 @@ public class PollRestController {
 	public ResponseEntity<String> setVotes(@RequestBody Poll poll, @PathVariable int id, @PathVariable String uname) {
 
 		if (!pollRepository.findById(id).isPresent())
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity<>("Poll not in system, try anothe ID!", HttpStatus.NOT_FOUND);
 		if (!userRepository.findById(uname).isPresent())
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity<>("User not registered in system!", HttpStatus.NOT_FOUND);
 
 		Poll pollOld = pollRepository.findById(id).get();
 		User user = userRepository.findById(uname).get();
@@ -71,6 +71,25 @@ public class PollRestController {
 		pollOld.setVoteRed(poll.getVoteRed());
 		pollRepository.save(pollOld);
 		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/polls/{id}/setVotes")
+	public ResponseEntity<String> setVotes(@RequestBody Poll poll, @PathVariable int id) {
+
+		if (!pollRepository.findById(id).isPresent())
+			return new ResponseEntity<>("Poll not in system, try anothe ID!", HttpStatus.NOT_FOUND);
+		
+		Poll pollOld = pollRepository.findById(id).get();
+		
+		if (pollOld.isPublic() != true) {
+			return new ResponseEntity<>("Poll is private, can't vote without logging in!", HttpStatus.BAD_REQUEST);
+		} else {
+			pollOld.setVoteGreen(poll.getVoteGreen());
+			pollOld.setVoteRed(poll.getVoteRed());
+			pollRepository.save(pollOld);
+		
+			return ResponseEntity.ok().build();
+		}
 	}
 
 	@PutMapping("/polls/{id}")

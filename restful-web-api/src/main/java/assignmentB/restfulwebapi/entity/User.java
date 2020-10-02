@@ -1,4 +1,4 @@
-package AssignmentB.restfulwebapi.entity;
+package assignmentB.restfulwebapi.entity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,9 @@
-package AssignmentB.restfulwebapi.entity;
+package assignmentB.restfulwebapi.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class Poll {
 	@ManyToOne
 	private User user;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<User> usersVoted = new ArrayList<User>();
 
 	public Poll() {
