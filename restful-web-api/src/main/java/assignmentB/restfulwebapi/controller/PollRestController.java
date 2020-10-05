@@ -121,8 +121,9 @@ public class PollRestController {
 
 		while (optPoll.isPresent()) {
 			Poll poll = optPoll.get();
-			poll.getUser().removePoll(poll);
-			pollRepository.save(poll);
+			if(poll.getUser() != null)
+				poll.getUser().removePoll(poll);
+			else pollRepository.delete(poll); //Should never happen
 			optPoll = pollRepository.findById(id);
 		}
 		return ResponseEntity.ok().build();
