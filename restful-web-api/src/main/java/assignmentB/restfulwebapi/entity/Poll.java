@@ -55,11 +55,6 @@ public class Poll {
 	public void setUsersVoted(User userVoted) {
 		this.usersVoted.add(userVoted);
 	}
-	
-	public User getUser() {
-		if (this.user == null) return new User("temp", "temp", "temp", "temp", "temp", false);
-		return this.user;
-	}
 
 	public void setUser(User user) {
 		this.user = user;
