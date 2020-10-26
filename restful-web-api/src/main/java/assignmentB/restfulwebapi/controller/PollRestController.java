@@ -1,21 +1,21 @@
 package assignmentB.restfulwebapi.controller;
 
 import java.util.Optional;
+import java.util.List;
 
+import assignmentB.restfulwebapi.repository.mongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import assignmentB.restfulwebapi.entity.Poll;
 import assignmentB.restfulwebapi.entity.User;
 import assignmentB.restfulwebapi.repository.IPollRepository;
 import assignmentB.restfulwebapi.repository.IUserRepository;
-
+// @EnableMongoRepositories(basePackageClasses = IPollRepository.class)
 @Controller
 public class PollRestController {
 
@@ -23,6 +23,11 @@ public class PollRestController {
 	private IPollRepository pollRepository;
 	@Autowired
 	private IUserRepository userRepository;
+	@Autowired
+	private mongoRepository mongoRepository;
+
+
+
 
 	@PutMapping("/polls/{id}/{uname}/setVotes")
 	public ResponseEntity<String> setVotes(@RequestBody Poll poll, @PathVariable int id, @PathVariable String uname) {
@@ -77,7 +82,7 @@ public class PollRestController {
 	public ResponseEntity<String> setVotes(@RequestBody Poll poll, @PathVariable int id) {
 
 		if (!pollRepository.findById(id).isPresent())
-			return new ResponseEntity<>("Poll not in system, try anothe ID!", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Poll not in system, try another ID!", HttpStatus.NOT_FOUND);
 		
 		Poll pollOld = pollRepository.findById(id).get();
 		
@@ -131,4 +136,6 @@ public class PollRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+
+
 }

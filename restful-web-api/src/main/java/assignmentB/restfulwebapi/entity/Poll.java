@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Entity
@@ -22,7 +23,7 @@ public class Poll {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(AccessLevel.PROTECTED)
-	private int pollID;
+	private String id;
 	private String name;
 	private String description;
 	private boolean isPublic;
